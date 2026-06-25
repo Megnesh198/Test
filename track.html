@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Your Order - Jay Ambe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col">
+
+    <nav class="bg-white dark:bg-slate-800 shadow-sm border-b dark:border-slate-700 px-6 py-4 flex justify-between items-center">
+        <a href="index.html" class="text-xl font-extrabold text-slate-900 dark:text-white">← Jay Ambe <span class="text-orange-500">Tiffin</span></a>
+        <button onclick="document.documentElement.classList.toggle('dark')" class="bg-slate-100 dark:bg-slate-700 p-2 rounded-xl text-sm">🌓</button>
+    </nav>
+
+    <main class="flex-1 max-w-2xl w-full mx-auto px-6 py-12 space-y-8">
+        <div class="text-center space-y-2">
+            <h2 class="text-2xl font-black">Apne Order Ka Live Status Dekhein</h2>
+            <p class="text-xs text-slate-400">Registered mobile number daal kar tracking checks karein.</p>
+        </div>
+
+        <div class="flex gap-2 max-w-md mx-auto">
+            <input type="tel" id="trackPhoneInput" class="w-full border dark:border-slate-600 dark:bg-slate-700 text-slate-900 dark:text-white p-3 rounded-xl text-xs outline-none" placeholder="Enter 10 Digit Phone Number">
+            <button onclick="trackCustomerOrderLive()" class="bg-orange-500 text-white px-6 py-3 rounded-xl text-xs font-bold hover:bg-orange-600 transition shadow-md">Search</button>
+        </div>
+
+        <div id="tracking-result-box" class="space-y-4 hidden"></div>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="track.js"></script>
+</body>
+</html>

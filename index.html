@@ -3,658 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jay Ambe Tiffin Service - Enterprise Multi-Thali Engine</title>
+    <title>Jay Ambe Tiffin Service - Order Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script>
-        // Exact active Public Key extracted from your account dashboard keys matrix
-        emailjs.init("UalhuFSQLiaeY4o2a"); 
-
-        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-    </script>
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .gradient-brand { background: linear-gradient(135deg, #f97316 0%, #f59e0b 100%); }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 antialiased transition-colors duration-300">
 
-    <!-- TOP GLOBAL NAVIGATION BAR -->
-    <nav class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-slate-100 dark:border-slate-700 transition-colors duration-300">
+    <nav class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-slate-100 dark:border-slate-700">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl gradient-brand flex items-center justify-center text-white text-xl font-bold shadow-md shadow-orange-500/20">JA</div>
-                <div class="flex flex-col">
-                    <span class="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-none">Jay Ambe <span class="text-orange-500">Tiffin</span></span>
-                    <span id="role-badge" class="text-[9px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest mt-1">Customer Lounge</span>
-                </div>
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center text-white text-xl font-bold">JA</div>
+                <span class="text-xl font-extrabold text-slate-900 dark:text-white">Jay Ambe <span class="text-orange-500">Tiffin</span></span>
             </div>
-
-            <div class="flex items-center gap-3">
-                <a href="#live-tracking-hub" class="text-xs font-bold text-orange-500 hover:underline mr-4">🔍 Track My Order</a>
-                <button onclick="toggleTheme()" class="bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 p-2.5 rounded-xl transition text-base">🌓</button>
-                <button id="nav-action-btn" onclick="switchInterfaceView()" class="bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-5 py-2.5 rounded-xl text-xs font-bold transition shadow-md hover:opacity-90">
-                    Switch to Admin Mode
-                </button>
+            <div class="flex items-center gap-4">
+                <a href="track.html" class="text-xs font-bold text-orange-500 hover:underline">🔍 Track My Order</a>
+                <a href="admin.html" class="text-xs font-bold text-slate-500 hover:underline">🔑 Admin Login</a>
+                <button onclick="toggleTheme()" class="bg-slate-100 dark:bg-slate-700 p-2 rounded-xl text-sm">🌓</button>
             </div>
         </div>
     </nav>
 
-    <!-- PREMIUM HOME PAGE VISUAL HERO SECTION -->
-    <header class="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 transition-colors duration-300">
-        <div class="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            <div class="space-y-6">
-                <span class="bg-orange-50 dark:bg-orange-950/40 text-orange-600 dark:text-orange-400 text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">Ghar Jaisa Swad, Har Roz 🍛</span>
-                <h1 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight leading-none">
-                    Ghar Ka Taaza <span class="text-orange-500">Pure Veg</span> Tiffin Service
-                </h1>
-                <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed max-w-md">
-                    Bhubaneswar ka sabse trusted aur hygienic catering workflow. Ab aap apni manpasand thali select karke quantitative custom elements ke sath realtime book kar sakte hain.
-                </p>
-                <div class="flex gap-3">
-                    <a href="#customer-view" class="gradient-brand text-white text-xs font-bold px-6 py-3 rounded-xl shadow-md shadow-orange-500/20 hover:opacity-95 transition">Order Your Thali Now</a>
-                    <a href="#live-tracking-hub" class="bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white text-xs font-bold px-6 py-3 rounded-xl hover:opacity-95 transition">Track Status</a>
-                </div>
-            </div>
-            <div class="grid grid-cols-2 gap-4">
-                <div class="space-y-4">
-                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" alt="Fresh Healthy Meal" class="w-full h-48 md:h-64 object-cover rounded-[2rem] shadow-md transition hover:scale-[1.02] duration-300">
-                    <div class="bg-orange-500 text-white p-5 rounded-[2rem] text-center shadow-lg">
-                        <span class="text-2xl block mb-1">🛵</span>
-                        <span class="text-xs font-black uppercase tracking-wider block">Super Fast Delivery</span>
-                    </div>
-                </div>
-                <div class="space-y-4 pt-8">
-                    <div class="bg-slate-900 text-white p-5 rounded-[2rem] text-center shadow-lg">
-                        <span class="text-2xl block mb-1">🧼</span>
-                        <span class="text-xs font-black uppercase tracking-wider block">100% Hygienic Kitchen</span>
-                    </div>
-                    <img src="https://images.unsplash.com/photo-1626132647523-66f5bf380027?auto=format&fit=crop&w=600&q=80" alt="Hot Premium Catering Packaging" class="w-full h-48 md:h-64 object-cover rounded-[2rem] shadow-md transition hover:scale-[1.02] duration-300">
-                </div>
-            </div>
+    <header class="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 py-12 px-6">
+        
+        <div class="max-w-4xl mx-auto text-center space-y-4">
+            <h1 class="text-3xl md:text-5xl font-black tracking-tight text-slate-900 dark:text-white">Ghar Ka Taaza <span class="text-orange-500">Pure Veg</span> Tiffin</h1>
+            <p class="text-slate-500 dark:text-slate-400 text-sm max-w-md mx-auto">Apni manpasand thali select karke quantitative custom elements ke sath realtime book karein.</p>
         </div>
     </header>
 
-    <!-- NEW REAL-TIME CUSTOMER TRACKING HUB -->
-    <section id="live-tracking-hub" class="py-10 px-6 max-w-4xl mx-auto mt-6 bg-orange-500/5 dark:bg-orange-500/10 rounded-3xl border border-orange-500/20">
-        <div class="text-center mb-6">
-            <span class="text-xs font-bold text-orange-500 uppercase tracking-widest block">Live Status Tracking</span>
-            <h3 class="text-xl font-extrabold text-slate-900 dark:text-white">Apne Order Ka Live Status Dekhein</h3>
-            <p class="text-xs text-slate-400 mt-1">Apna registered mobile number daal kar realtime updates check karein.</p>
-        </div>
-        <div class="flex gap-2 max-w-md mx-auto">
-            <input type="tel" id="trackPhoneInput" class="w-full border border-slate-200 dark:border-slate-600 dark:bg-slate-700 text-slate-900 dark:text-white p-3 rounded-xl text-xs focus:ring-2 focus:ring-orange-500 outline-none" placeholder="Enter 10 Digit Phone Number">
-            <button onclick="trackCustomerOrderLive()" class="bg-orange-500 text-white px-6 py-3 rounded-xl text-xs font-bold hover:bg-orange-600 transition shadow-md">Search</button>
-        </div>
-        <div id="tracking-result-box" class="mt-6 max-w-xl mx-auto hidden"></div>
-    </section>
-
-    <!-- ================== VIEW 1: PREMIUM CUSTOMER LOUNGE ================== -->
-    <div id="customer-view" class="block">
-        <section class="py-12 px-6 max-w-7xl mx-auto">
-            <div class="text-center max-w-md mx-auto mb-10">
-                <span class="text-xs font-bold text-orange-500 uppercase tracking-widest block mb-1">Select Your Meal</span>
-                <h2 class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Our Live Thali Menu</h2>
-            </div>
-
-            <div id="client-thalis-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"></div>
-
-            <div class="mb-12">
-                <h3 class="text-xs font-bold tracking-wider text-slate-400 uppercase mb-4">✨ Choice Add-ons & Extra Side Dishes</h3>
-                <div id="client-addons-container" class="grid grid-cols-1 sm:grid-cols-4 gap-4"></div>
-            </div>
-
-            <div class="bg-white dark:bg-slate-800 rounded-[2.5rem] p-8 border border-slate-100 dark:border-slate-700 shadow-xl max-w-4xl mx-auto">
-                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Customer Delivery Coordinates</h3>
-                <p class="text-slate-400 text-xs mb-6">Apna details bharein aur humari team aapko realtime details mail karegi.</p>
-                
-                <form id="orderForm" onsubmit="submitCustomerOrder(event)" class="space-y-4">
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Your Full Name</label>
-                            <input type="text" id="custName" class="w-full border border-slate-200 dark:border-slate-600 dark:bg-slate-700 text-slate-900 dark:text-white p-3 rounded-xl text-xs focus:ring-2 focus:ring-orange-500 outline-none" placeholder="E.g., Rahul Sharma" required>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Active Mobile Number</label>
-                            <input type="tel" id="custPhone" class="w-full border border-slate-200 dark:border-slate-600 dark:bg-slate-700 text-slate-900 dark:text-white p-3 rounded-xl text-xs focus:ring-2 focus:ring-orange-500 outline-none" placeholder="10 Digit Contact No." required>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Email ID (For Order Receipts)</label>
-                            <input type="email" id="custEmail" class="w-full border border-slate-200 dark:border-slate-600 dark:bg-slate-700 text-slate-900 dark:text-white p-3 rounded-xl text-xs focus:ring-2 focus:ring-orange-500 outline-none" placeholder="name@domain.com" required>
-                        </div>
-                    </div>
-
-                    <div class="border border-slate-200 dark:border-slate-700 p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/50">
-                        <label class="block text-[10px] font-bold text-orange-500 uppercase tracking-wider mb-3">Items Selected Matrix (Tick to enable & Adjust Quantities)</label>
-                        <div id="dynamic-items-checklist" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs"></div>
-                    </div>
-
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Custom Request / Item Not in List? (Type & Press Enter)</label>
-                        <input type="text" id="customItemInput" onkeydown="handleCustomRequestEnter(event)" class="w-full border border-slate-200 dark:border-slate-600 dark:bg-slate-700 text-slate-900 dark:text-white p-3 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500 outline-none transition" placeholder="Type dish and hit Enter...">
-                        <div id="custom-items-tags-container" class="flex flex-wrap gap-1.5 mt-2"></div>
-                    </div>
-
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Complete Delivery Address</label>
-                        <textarea id="custAddress" rows="3" class="w-full border border-slate-200 dark:border-slate-600 dark:bg-slate-700 text-slate-900 dark:text-white p-3 rounded-xl text-xs focus:ring-2 focus:ring-orange-500 outline-none transition resize-none" placeholder="Flat No, Building Name, Street Landmark..." required></textarea>
-                    </div>
-                    <button type="submit" class="w-full bg-orange-500 text-white py-4 rounded-xl font-bold text-xs shadow-md transition transform active:scale-[0.99] hover:bg-orange-600">Confirm Order Booking & Send Mail</button>
-                </form>
-            </div>
-        </section>
-    </div>
-
-    <!-- ================== VIEW 2: ADMIN SECURITY VERIFICATION ================== -->
-    <div id="admin-auth-view" class="max-w-md mx-auto my-24 px-4 hidden">
-        <div class="bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-xl border border-slate-100 dark:border-slate-700">
-            <div class="text-center mb-6">
-                <span class="text-3xl">🔑</span>
-                <h2 class="text-xl font-bold text-slate-900 dark:text-white mt-2">Administrative Hub Gate</h2>
-            </div>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Security Passcode</label>
-                    <input type="password" id="adminPassword" class="w-full border border-slate-200 dark:border-slate-600 dark:bg-slate-700 p-3 rounded-xl text-xs focus:ring-2 focus:ring-orange-500 outline-none" placeholder="Enter System Password">
+    <main class="py-12 px-6 max-w-7xl mx-auto space-y-12">
+        <section class="max-w-7xl mx-auto px-6 py-12 md:py-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div class="space-y-6 text-center md:text-left animate-fade-in">
+                <div class="inline-flex items-center gap-2 bg-orange-50 dark:bg-orange-950/40 border border-orange-100 dark:border-orange-900/50 px-4 py-1.5 rounded-full text-xs font-bold text-orange-600 dark:text-orange-400">
+                    ✨ Fresh, Healthy & Hygienic Daily Tiffins
                 </div>
-                <button onclick="authenticateAdminMode()" class="w-full bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 py-3 rounded-xl font-bold text-xs shadow transition">Unlock Dashboard</button>
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-slate-950 dark:text-white leading-none">
+                    Ghar Jaisa Swaad, <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500">Every Single Day.</span>
+                </h1>
+                <p class="text-sm sm:text-base text-slate-500 dark:text-slate-400 max-w-lg leading-relaxed">
+                    Experience premium homemade meals curated with love, customized according to your diet controls, and delivered piping hot straight to your doorstep.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-2">
+                    <a href="#menu-section" class="bg-gradient-to-r from-orange-500 to-red-500 hover:opacity-95 text-white font-extrabold text-xs tracking-wider uppercase px-8 py-4 rounded-2xl shadow-lg shadow-orange-500/20 text-center transition">
+                        Explore Today's Menu
+                    </a>
+                    <a href="track.html" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 text-slate-800 dark:text-white font-bold text-xs tracking-wider uppercase px-8 py-4 rounded-2xl text-center transition">
+                        Track Active Order
+                    </a>
+                </div>
             </div>
-        </div>
-    </div>
 
-    <!-- ================== VIEW 3: LIVE OPERATIONS MONITOR & METRICS ================== -->
-    <div id="admin-dashboard-view" class="hidden max-w-7xl mx-auto py-10 px-6">
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
-                <span class="text-[10px] uppercase font-bold tracking-wider text-slate-400 block">Total Orders Stream</span>
-                <span id="stat-monthly" class="text-2xl font-black text-slate-900 dark:text-white block mt-1">0</span>
-            </div>
-            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
-                <span class="text-[10px] uppercase font-bold tracking-wider text-blue-500 block">🛵 Dispatched</span>
-                <span id="stat-picked" class="text-2xl font-black text-blue-500 block mt-1">0</span>
-            </div>
-            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
-                <span class="text-[10px] uppercase font-bold tracking-wider text-red-500 block">❌ Cancelled</span>
-                <span id="stat-cancelled" class="text-2xl font-black text-red-500 block mt-1">0</span>
-            </div>
-            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
-                <span class="text-[10px] uppercase font-bold tracking-wider text-amber-500 block">⏳ Total Pending</span>
-                <span id="stat-pending" class="text-2xl font-black text-amber-500 block mt-1">0</span>
-            </div>
-            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm col-span-2 md:col-span-1">
-                <span class="text-[10px] uppercase font-bold tracking-wider text-green-600 block">System Log Status</span>
-                <span class="text-sm font-black text-green-600 block mt-1">ONLINE 🚀</span>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div class="lg:col-span-8 space-y-6">
-                <div>
-                    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Real-time Order Logs</h2>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="orders-container"></div>
+            <div class="relative flex justify-center items-center lg:pl-10">
+                <div class="absolute w-72 h-72 bg-orange-300 dark:bg-orange-950/30 rounded-full filter blur-3xl opacity-30 dark:opacity-20 top-10 left-10 -z-10 animate-pulse"></div>
+                
+                <div class="relative w-full max-w-[420px] aspect-square rounded-[3rem] overflow-hidden border-4 border-white dark:border-slate-800 shadow-2xl shadow-slate-300/60 dark:shadow-none bg-slate-100 dark:bg-slate-800">
+                    <img 
+                        src="Indian Meal.jpg" 
+                        alt="Premium Healthy Meal Thali" 
+                        class="w-full h-full object-cover transform hover:scale-105 transition duration-700"
+                    >
+                    <div class="absolute bottom-4 left-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/20 shadow-lg flex items-center gap-2">
+                        <span class="text-xl">⭐</span>
+                        <div>
+                            <p class="text-[10px] font-black uppercase text-slate-400 tracking-wider leading-none">Loved By</p>
+                            <p class="text-xs font-black text-slate-900 dark:text-white">500+ Active Subscribers</p>
+                        </div>
+                    </div>
                 </div>
             </div>
             
-            <div class="lg:col-span-4 space-y-6">
-                <!-- FORM 1: CREATE NEW THALI -->
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700">
-                    <h3 class="text-xs font-black text-orange-500 uppercase tracking-widest mb-1">Form 1: Add New Tiffin Thali</h3>
-                    <form id="adminThaliForm" onsubmit="addNewThaliRecord(event)" class="space-y-3">
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Thali Title / Name</label>
-                            <input type="text" id="thaliTitle" class="w-full border border-slate-200 dark:border-slate-600 dark:bg-slate-700 p-2 rounded-xl text-xs text-slate-900 dark:text-white" placeholder="E.g., Maharaja Special Deluxe Thali" required>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Constituent Items (Comma separated)</label>
-                            <input type="text" id="thaliItems" class="w-full border border-slate-200 dark:border-slate-600 dark:bg-slate-700 p-2 rounded-xl text-xs text-slate-900 dark:text-white" placeholder="Roti, Paneer Masala, Dal" required>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Thali Base Price (₹)</label>
-                            <input type="number" id="thaliPrice" class="w-full border border-slate-200 dark:border-slate-600 dark:bg-slate-700 p-2 rounded-xl text-xs text-slate-900 dark:text-white" placeholder="E.g., 180" required>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Upload Thali Photo</label>
-                            <input type="file" id="thaliImageFile" accept="image/*" class="w-full border border-slate-200 dark:border-slate-600 dark:bg-slate-700 p-1.5 rounded-xl text-xs">
-                            <input type="hidden" id="thaliImageBase64">
-                        </div>
-                        <button type="submit" class="w-full gradient-brand text-white py-2.5 rounded-xl font-bold text-xs shadow">Publish Thali Package Live 🍛</button>
-                    </form>
-                </div>
+        </section>
+        <div id="client-thalis-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
 
-                <!-- FORM 2: CREATE ADD-ON ACCESSORIES -->
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700">
-                    <h3 class="text-xs font-black text-blue-500 uppercase tracking-widest mb-1">Form 2: Add Extra Item / Add-on</h3>
-                    <form id="addonForm" onsubmit="addNewAddonItem(event)" class="space-y-3">
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Item Name</label>
-                            <input type="text" id="addonName" class="w-full border border-slate-200 dark:border-slate-600 dark:bg-slate-700 p-2 rounded-xl text-xs text-slate-900 dark:text-white" placeholder="E.g., Premium Gulab Jamun" required>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Price (₹)</label>
-                            <input type="number" id="addonPrice" class="w-full border border-slate-200 dark:border-slate-600 dark:bg-slate-700 p-2 rounded-xl text-xs text-slate-900 dark:text-white" placeholder="E.g., 40" required>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Upload Item Photo</label>
-                            <input type="file" id="addonImageFile" accept="image/*" class="w-full border border-slate-200 dark:border-slate-600 dark:bg-slate-700 p-1.5 rounded-xl text-xs">
-                            <input type="hidden" id="addonImageBase64">
-                        </div>
-                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl font-bold text-xs shadow transition">Inject Side Asset Product 🚀</button>
-                    </form>
+        <div>
+            <h3 class="text-xs font-bold tracking-wider text-slate-400 uppercase mb-4">✨ Choice Add-ons & Extra Side Dishes</h3>
+            <div id="client-addons-container" class="grid grid-cols-1 sm:grid-cols-4 gap-4"></div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-800 rounded-[2.5rem] p-8 border border-slate-100 dark:border-slate-700 shadow-xl max-w-4xl mx-auto">
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-6">Customer Delivery Coordinates</h3>
+            <form id="orderForm" onsubmit="submitCustomerOrder(event)" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <input type="text" id="custName" class="w-full border dark:border-slate-600 dark:bg-slate-700 p-3 rounded-xl text-xs" placeholder="Your Full Name" required>
+                    <input type="tel" id="custPhone" class="w-full border dark:border-slate-600 dark:bg-slate-700 p-3 rounded-xl text-xs" placeholder="10 Digit Contact No." required>
+                    <input type="email" id="custEmail" class="w-full border dark:border-slate-600 dark:bg-slate-700 p-3 rounded-xl text-xs" placeholder="name@domain.com" required>
                 </div>
+                <div class="border dark:border-slate-700 p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/50">
+                    <div id="dynamic-items-checklist" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs"></div>
+                    <!-- MAKE YOUR OWN THALI: DIET CONTROL PREFERENCES -->
+                <div class="border border-green-200 dark:border-green-900/60 p-5 rounded-2xl bg-green-50/50 dark:bg-green-950/20 space-y-3">
+                    <h4 class="text-xs font-black text-green-600 dark:text-green-400 uppercase tracking-wider flex items-center gap-1.5">
+                        🍃 Make Your Own Thali (Customized Diet Control)
+                    </h4>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                        <label class="flex items-center gap-2 cursor-pointer p-2 bg-white dark:bg-slate-800 rounded-xl shadow-sm border dark:border-slate-700">
+                            <input type="checkbox" name="dietPrefs" value="Less Oil" class="w-4 h-4 text-green-500 focus:ring-green-500">
+                            <span class="font-semibold">Kam Tel (Less Oil)</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer p-2 bg-white dark:bg-slate-800 rounded-xl shadow-sm border dark:border-slate-700">
+                            <input type="checkbox" name="dietPrefs" value="No Spice" class="w-4 h-4 text-green-500 focus:ring-green-500">
+                            <span class="font-semibold">Bina Masala (No Spice)</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer p-2 bg-white dark:bg-slate-800 rounded-xl shadow-sm border dark:border-slate-700">
+                            <input type="checkbox" name="dietPrefs" value="Extra Protein (More Dal/Paneer)" class="w-4 h-4 text-green-500 focus:ring-green-500">
+                            <span class="font-semibold">High Protein (+₹20)</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer p-2 bg-white dark:bg-slate-800 rounded-xl shadow-sm border dark:border-slate-700">
+                            <input type="checkbox" name="dietPrefs" value="Swap Roti with Extra Rice" class="w-4 h-4 text-green-500 focus:ring-green-500">
+                            <span class="font-semibold">Swap Roti 🔄 Rice</span>
+                        </label>
+                    </div>
+                </div>
+                </div>
+                <div>
+                    <input type="text" id="customItemInput" onkeydown="handleCustomRequestEnter(event)" class="w-full border dark:border-slate-600 dark:bg-slate-700 p-3 rounded-xl text-xs" placeholder="Type custom dish and hit Enter...">
+                    <div id="custom-items-tags-container" class="flex flex-wrap gap-1.5 mt-2"></div>
+                </div>
+                <textarea id="custAddress" rows="3" class="w-full border dark:border-slate-600 dark:bg-slate-700 p-3 rounded-xl text-xs resize-none" placeholder="Complete Delivery Address..." required></textarea>
+                <button type="submit" class="w-full bg-orange-500 text-white py-4 rounded-xl font-bold text-xs shadow-md hover:bg-orange-600 transition">Confirm Order Booking & Send Mail</button>
+            </form>
+        </div>
+        <!-- CUSTOMER REVIEWS & RATINGS DISPLAY -->
+        <div class="mt-16 bg-white dark:bg-slate-800 rounded-[2.5rem] p-8 border border-slate-100 dark:border-slate-700 shadow-xl max-w-4xl mx-auto">
+            <div class="text-center max-w-md mx-auto mb-8 space-y-2">
+                <h3 class="text-xl font-black text-slate-900 dark:text-white">⭐ What Our Family Says</h3>
+                <p class="text-xs text-slate-400">Real feedback from our regular tiffin subscribers.</p>
+            </div>
+            <!-- Reviews Grid Container -->
+            <div id="public-reviews-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <p class="text-xs text-slate-400 text-center col-span-2">Loading customer love...</p>
             </div>
         </div>
-    </nav>
+    </main>
 
-    <!-- Firebase System Modules -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyA6NgyT_wXp1FmXDNXKbHGzkeMoBsmwlo",
-            authDomain: "jay-ambe-tiffin-service.firebaseapp.com",
-            databaseURL: "https://jay-ambe-tiffin-service-default-rtdb.firebaseio.com",
-            projectId: "jay-ambe-tiffin-service",
-            storageBucket: "jay-ambe-tiffin-service.appspot.com",
-            messagingSenderId: "741224227914",
-            appId: "1:741224227914:web:aaad241b8f36b12f9c11ef"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-
-        let systemPassword = "Minu@198"; 
-        let isAdminLoggedIn = false;
-        let customRequestsArray = [];
-        let masterAvailableChecklistItems = [];
-
-        function bindImageEncoder(fileId, hiddenId) {
-            document.getElementById(fileId).addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(event) {
-                        document.getElementById(hiddenId).value = event.target.result;
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
-        bindImageEncoder('thaliImageFile', 'thaliImageBase64');
-        bindImageEncoder('addonImageFile', 'addonImageBase64');
-
-        function adjustQtyVal(elementId, change) {
-            const el = document.getElementById(elementId);
-            let val = parseInt(el.innerText) || 1;
-            val += change;
-            if(val < 1) val = 1;
-            el.innerText = val;
-        }
-
-        function handleCustomRequestEnter(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                const inputVal = e.target.value.trim();
-                if (inputVal && !customRequestsArray.includes(inputVal)) {
-                    customRequestsArray.push(inputVal);
-                    renderCustomTags();
-                }
-                e.target.value = "";
-            }
-        }
-
-        function renderCustomTags() {
-            const container = document.getElementById('custom-items-tags-container');
-            container.innerHTML = "";
-            customRequestsArray.forEach((item, index) => {
-                container.innerHTML += `
-                    <span class="bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-400 font-bold text-[11px] px-2.5 py-1 rounded-full flex items-center gap-1.5 border border-indigo-200 dark:border-indigo-900">
-                        ✨ ${item}
-                        <button type="button" onclick="removeCustomTag(${index})" class="text-indigo-500 font-black hover:text-indigo-700 text-[10px]">×</button>
-                    </span>`;
-            });
-        }
-
-        function removeCustomTag(index) {
-            customRequestsArray.splice(index, 1);
-            renderCustomTags();
-        }
-
-        function synchronizeChecklistDom() {
-            const container = document.getElementById('dynamic-items-checklist');
-            container.innerHTML = "";
-            
-            masterAvailableChecklistItems.forEach((item, idx) => {
-                const safeId = `qty_counter_${idx}`;
-                container.innerHTML += `
-                    <div class="flex items-center justify-between bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-3 rounded-xl shadow-sm">
-                        <label class="flex items-center gap-2 cursor-pointer font-bold text-slate-700 dark:text-slate-300">
-                            <input type="checkbox" name="loungeCheckboxes" value="${item}" data-counter-id="${safeId}" class="w-4 h-4 rounded border-slate-300 text-orange-500 focus:ring-orange-500">
-                            <span>${item}</span>
-                        </label>
-                        <div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-900 px-2 py-1 rounded-lg">
-                            <button type="button" onclick="adjustQtyVal('${safeId}', -1)" class="w-5 h-5 font-black text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700 rounded flex items-center justify-center">-</button>
-                            <span id="${safeId}" class="w-6 text-center font-extrabold text-slate-800 dark:text-white">1</span>
-                            <button type="button" onclick="adjustQtyVal('${safeId}', 1)" class="w-5 h-5 font-black text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-700 rounded flex items-center justify-center">+</button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        database.ref('tiffinThalis').on('value', (snapshot) => {
-            const thalis = snapshot.val() || {};
-            const grid = document.getElementById('client-thalis-grid');
-            grid.innerHTML = "";
-            masterAvailableChecklistItems = [];
-
-            Object.keys(thalis).forEach(key => {
-                const t = thalis[key];
-                if (!masterAvailableChecklistItems.includes(t.title)) masterAvailableChecklistItems.push(t.title);
-
-                const imgTag = (t.image) ? `<img src="${t.image}" class="w-full h-44 object-cover">` : `<div class="h-44 w-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-4xl">🍛</div>`;
-                let itemsBadges = (t.items || []).map(i => `<span class="bg-orange-50 dark:bg-orange-950/40 text-orange-700 dark:text-orange-400 text-[10px] font-bold px-2 py-0.5 rounded">🍛 ${i}</span>`).join('');
-
-                grid.innerHTML += `
-                    <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-md overflow-hidden border border-slate-100 dark:border-slate-700 relative flex flex-col justify-between">
-                        <div>
-                            <div class="relative">${imgTag} <span class="absolute top-3 right-3 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full gradient-brand text-white shadow-sm">₹${t.price}</span></div>
-                            <div class="p-5">
-                                <h4 class="text-base font-extrabold text-slate-900 dark:text-white mb-2">${t.title}</h4>
-                                <div class="flex flex-wrap gap-1">${itemsBadges}</div>
-                            </div>
-                        </div>
-                        <div class="p-5 pt-0">
-                            <button onclick="deleteThaliRecord('${key}')" class="text-[11px] text-red-500 font-bold hover:underline hidden admin-visible-block">Delete Thali Card ❌</button>
-                        </div>
-                    </div>
-                `;
-            });
-            synchronizeChecklistDom();
-        });
-
-        database.ref('extraItems').on('value', (snapshot) => {
-            const addons = snapshot.val() || {};
-            const clientContainer = document.getElementById('client-addons-container');
-            clientContainer.innerHTML = "";
-
-            Object.keys(addons).forEach(key => {
-                const item = addons[key];
-                if(!masterAvailableChecklistItems.includes(item.name)) masterAvailableChecklistItems.push(item.name);
-
-                const imgMarkup = (item.image) ? `<img src="${item.image}" class="w-12 h-12 object-cover rounded-xl">` : `<div class="w-12 h-12 bg-slate-100 dark:bg-slate-700 rounded-xl flex items-center justify-center text-lg">🍲</div>`;
-                clientContainer.innerHTML += `
-                    <div class="bg-white dark:bg-slate-800 border border-slate-200/60 dark:border-slate-700/60 p-2.5 rounded-2xl shadow-sm flex items-center gap-3">
-                        ${imgMarkup}
-                        <div class="flex-1 min-w-0">
-                            <h4 class="text-xs font-bold text-slate-900 dark:text-white truncate">${item.name}</h4>
-                            <p class="text-xs font-black text-orange-500">₹${item.price}</p>
-                        </div>
-                    </div>
-                `;
-            });
-            synchronizeChecklistDom();
-        });
-
-        // 📩 DYNAMIC MAIL ROUTER - Dispatches confirmation to customer & notification to admin
-        function dispatchStatusNotification(name, phone, targetEmail, status, logsText) {
-            const params = {
-                to_name: name,
-                customer_phone: phone,
-                customer_email: targetEmail, // Ensure your EmailJS Template contains {{customer_email}} in the "To" field
-                order_status: status,
-                items_summary: logsText,
-                reply_to: "jayambetiffin@gmail.com"
-            };
-
-            emailjs.send('service_bbr2v68', 'template_32a0oss', params)
-                .then(() => console.log("Real-time Notification Mail Pipeline Triggered Successfully."))
-                .catch(err => console.error("Mail dispatch mismatch Error:", err));
-        }
-
-        // 🔍 REAL-TIME CUSTOMER LIVE TRACKING ENGINE
-        function trackCustomerOrderLive() {
-            const phoneInput = document.getElementById('trackPhoneInput').value.trim();
-            const resultBox = document.getElementById('tracking-result-box');
-            
-            if(!phoneInput) {
-                alert("Please enter a valid phone number to track!");
-                return;
-            }
-
-            database.ref('orders').once('value', (snapshot) => {
-                const orders = snapshot.val();
-                resultBox.innerHTML = "";
-                resultBox.classList.remove('hidden');
-
-                if(!orders) {
-                    resultBox.innerHTML = `<div class="bg-red-50 text-red-600 text-xs p-4 rounded-xl text-center font-bold">Koi orders nahi mile is number par.</div>`;
-                    return;
-                }
-
-                let foundOrders = [];
-                Object.keys(orders).forEach(id => {
-                    if(orders[id].phone === phoneInput) {
-                        foundOrders.push(orders[id]);
-                    }
-                });
-
-                if(foundOrders.length === 0) {
-                    resultBox.innerHTML = `<div class="bg-red-50 text-red-600 text-xs p-4 rounded-xl text-center font-bold">Koi active orders nahi mile is number par.</div>`;
-                } else {
-                    // Sorting to show newest order first
-                    foundOrders.reverse().forEach(o => {
-                        let statusColor = "text-amber-500 bg-amber-50 border-amber-200";
-                        if(o.status === "Delivered") statusColor = "text-green-600 bg-green-50 border-green-200";
-                        if(o.status === "Cancelled") statusColor = "text-red-600 bg-red-50 border-red-200";
-                        if(o.status === "Out for Delivery") statusColor = "text-blue-600 bg-blue-50 border-blue-200";
-
-                        resultBox.innerHTML += `
-                            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-md space-y-3 mb-3">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-xs font-extrabold text-slate-900 dark:text-white">Order for ${o.customerName}</span>
-                                    <span class="text-[10px] uppercase font-black px-2.5 py-1 rounded-full border ${statusColor}">${o.status}</span>
-                                </div>
-                                <p class="text-xs text-orange-500 font-bold">🍱 Items: <span class="text-slate-600 dark:text-slate-300 font-medium">${o.notes}</span></p>
-                                <p class="text-[10px] text-slate-400">📅 Last Updated: ${o.timestamp}</p>
-                            </div>
-                        `;
-                    });
-                }
-            });
-        }
-
-        function submitCustomerOrder(e) {
-            e.preventDefault();
-            let segments = [];
-
-            document.querySelectorAll('input[name="loungeCheckboxes"]:checked').forEach(cb => {
-                const counterId = cb.getAttribute('data-counter-id');
-                const qty = document.getElementById(counterId).innerText;
-                segments.push(`${cb.value} (Qty: ${qty})`);
-            });
-
-            customRequestsArray.forEach(c => {
-                segments.push(`${c} (Custom Request)`);
-            });
-
-            const finalSummary = segments.join(', ');
-            if(!finalSummary) {
-                alert("❌ Kripya menu se item select kijiye ya Custom request box me type karke Enter press kijiye!");
-                return;
-            }
-
-            const clientMail = document.getElementById('custEmail').value.trim();
-            const orderPayload = {
-                customerName: document.getElementById('custName').value.trim(),
-                phone: document.getElementById('custPhone').value.trim(),
-                email: clientMail,
-                notes: finalSummary,
-                address: document.getElementById('custAddress').value.trim(),
-                status: "Pending",
-                timestamp: new Date().toLocaleString('en-US', { hour12: true })
-            };
-
-            database.ref('orders').push(orderPayload, (err) => {
-                if(!err) {
-                    alert("🎉 Aapka order book ho gaya hai! Confirmation mail dispatch kar diya gaya hai.");
-                    dispatchStatusNotification(orderPayload.customerName, orderPayload.phone, clientMail, "Pending (Confirmed)", finalSummary);
-                    document.getElementById('orderForm').reset();
-                    customRequestsArray = [];
-                    renderCustomTags();
-                }
-            });
-        }
-
-        function updateOrderStatus(orderId, statusState) {
-            database.ref(`orders/${orderId}`).once('value', (snap) => {
-                const data = snap.val();
-                if(data) {
-                    database.ref(`orders/${orderId}`).update({ 
-                        status: statusState,
-                        timestamp: new Date().toLocaleString('en-US', { hour12: true })
-                    }, (err) => {
-                        if(!err) {
-                            dispatchStatusNotification(data.customerName, data.phone, data.email || "jayambetiffin@gmail.com", statusState, data.notes);
-                            alert(`📋 Status updated to: ${statusState}. Email dispatched to customer!`);
-                        }
-                    });
-                }
-            });
-        }
-
-        function authenticateAdminMode() {
-            if(document.getElementById('adminPassword').value === systemPassword) {
-                isAdminLoggedIn = true;
-                document.getElementById('adminPassword').value = "";
-                document.getElementById('admin-auth-view').classList.add('hidden');
-                document.getElementById('admin-dashboard-view').classList.remove('hidden');
-                document.getElementById('role-badge').innerText = "ADMIN MASTER MODE";
-                document.getElementById('role-badge').className = "text-[9px] text-red-500 font-black tracking-widest mt-1";
-                document.getElementById('nav-action-btn').innerText = "Sign Out Engine";
-                toggleAdminInterfaceBlocks();
-            } else {
-                alert("❌ Authentication Passcode Mismatch!");
-            }
-        }
-
-        function switchInterfaceView() {
-            if(isAdminLoggedIn) {
-                isAdminLoggedIn = false;
-                document.getElementById('admin-dashboard-view').classList.add('hidden');
-                document.getElementById('admin-auth-view').classList.add('hidden');
-                document.getElementById('customer-view').classList.remove('hidden');
-                document.getElementById('role-badge').innerText = "Customer Lounge";
-                document.getElementById('nav-action-btn').innerText = "Switch to Admin Mode";
-                toggleAdminInterfaceBlocks();
-            } else {
-                if(document.getElementById('customer-view').classList.contains('hidden')) {
-                    document.getElementById('admin-auth-view').classList.add('hidden');
-                    document.getElementById('customer-view').classList.remove('hidden');
-                } else {
-                    document.getElementById('customer-view').classList.add('hidden');
-                    document.getElementById('admin-auth-view').classList.remove('hidden');
-                }
-            }
-        }
-
-        function toggleAdminInterfaceBlocks() {
-            document.querySelectorAll('.admin-visible-block').forEach(el => {
-                if(isAdminLoggedIn) el.classList.remove('hidden');
-                else el.classList.add('hidden');
-            });
-        }
-
-        function addNewThaliRecord(e) {
-            e.preventDefault();
-            const payload = {
-                title: document.getElementById('thaliTitle').value.trim(),
-                items: document.getElementById('thaliItems').value.split(',').map(i => i.trim()),
-                price: document.getElementById('thaliPrice').value.trim(),
-                image: document.getElementById('thaliImageBase64').value
-            };
-            database.ref('tiffinThalis').push(payload, (err) => {
-                if(!err) {
-                    alert("🎉 Nayi Thali Card Successfully Add Ho Gayi Hai!");
-                    document.getElementById('adminThaliForm').reset();
-                    document.getElementById('thaliImageBase64').value = "";
-                }
-            });
-        }
-
-        function addNewAddonItem(e) {
-            e.preventDefault();
-            const payload = {
-                name: document.getElementById('addonName').value.trim(),
-                price: document.getElementById('addonPrice').value.trim(),
-                image: document.getElementById('addonImageBase64').value
-            };
-            database.ref('extraItems').push(payload, (err) => {
-                if(!err) {
-                    alert("🎉 Extra Add-on Item Published!");
-                    document.getElementById('addonForm').reset();
-                    document.getElementById('addonImageBase64').value = "";
-                }
-            });
-        }
-
-        database.ref('orders').on('value', (snapshot) => {
-            const container = document.getElementById('orders-container');
-            container.innerHTML = "";
-            const orders = snapshot.val();
-
-            if(!orders) {
-                ['stat-monthly', 'stat-picked', 'stat-cancelled', 'stat-pending'].forEach(id => document.getElementById(id).innerText = "0");
-                container.innerHTML = `<div class="col-span-full text-center text-xs text-slate-400 py-6">No real-time logs found.</div>`;
-                return;
-            }
-
-            let m = 0, p = 0, c = 0, pen = 0;
-            Object.keys(orders).reverse().forEach(id => {
-                const o = orders[id];
-                m++;
-                if(o.status === "Pending" || o.status === "Cooking") pen++;
-                if(o.status === "Out for Delivery" || o.status === "Delivered") p++;
-                if(o.status === "Cancelled") c++;
-
-                container.innerHTML += `
-                    <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-4 shadow-sm flex flex-col justify-between">
-                        <div class="space-y-2 text-xs">
-                            <div class="flex justify-between items-center"><span class="font-extrabold text-slate-900 dark:text-white">👤 ${o.customerName}</span> <span class="text-[9px] uppercase font-bold tracking-wider px-2 py-0.5 rounded border border-orange-200 dark:border-orange-900 bg-orange-50 dark:bg-orange-950/20 text-orange-600">${o.status}</span></div>
-                            <p class="text-orange-500 font-bold">📞 ${o.phone} | ✉️ ${o.email || 'N/A'}</p>
-                            <p class="text-indigo-600 dark:text-indigo-400 font-bold">📋 Pack: ${o.notes}</p>
-                            <p class="text-slate-400 text-[11px] leading-tight">${o.address}</p>
-                        </div>
-                        <select onchange="updateOrderStatus('${id}', this.value)" class="mt-4 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 text-slate-800 dark:text-white rounded-xl text-[11px] font-semibold p-2 outline-none w-full">
-                            <option value="Pending" ${o.status==='Pending'?'selected':''}>⏳ Pending Queue</option>
-                            <option value="Cooking" ${o.status==='Cooking'?'selected':''}>🍳 Kitchen Cooking</option>
-                            <option value="Out for Delivery" ${o.status==='Out for Delivery'?'selected':''}>🛵 Out for Delivery</option>
-                            <option value="Delivered" ${o.status==='Delivered'?'selected':''}>✅ Delivered Confirmed</option>
-                            <option value="Cancelled" ${o.status==='Cancelled'?'selected':''}>❌ Cancelled Order</option>
-                        </select>
-                    </div>
-                `;
-            });
-
-            document.getElementById('stat-monthly').innerText = m;
-            document.getElementById('stat-picked').innerText = p;
-            document.getElementById('stat-cancelled').innerText = c;
-            document.getElementById('stat-pending').innerText = pen;
-        });
-
-        function toggleTheme() {
-            if (document.documentElement.classList.contains('dark')) {
-                document.documentElement.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-            } else {
-                document.documentElement.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-            }
-        }
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>

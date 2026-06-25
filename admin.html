@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Management System - Admin Control</title>
+    <!-- Tailwind CSS for modern enterprise styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- EmailJS Client SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <!-- Chart.js for high-fidelity interactive data modeling -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+    </style>
+</head>
+<body class="bg-[#f8fafc] dark:bg-[#0f172a] text-[#334155] dark:text-[#cbd5e1] min-h-screen antialiased transition-colors duration-200">
+
+    <!-- ADMINISTRATIVE AUTHENTICATION WALL -->
+    <div id="admin-auth-view" class="max-w-md mx-auto my-32 px-4">
+        <div class="bg-white dark:bg-[#1e293b] p-8 rounded-[2rem] shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800 text-center space-y-6">
+            <div class="w-16 h-16 bg-red-50 dark:bg-red-950/30 text-red-500 rounded-2xl flex items-center justify-center text-2xl mx-auto font-bold shadow-inner">🔑</div>
+            <div class="space-y-1">
+                <h2 class="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white">Secure Gateway Portal</h2>
+                <p class="text-xs text-slate-400">Enter administrative authorization passcode to unlock nodes.</p>
+            </div>
+            <input type="password" id="adminPassword" class="w-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#151f32] p-3.5 rounded-xl text-sm font-semibold tracking-widest text-center outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all" placeholder="••••••••">
+            <button onclick="authenticateAdminMode()" class="w-full bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 py-3.5 rounded-xl font-bold text-xs tracking-wider uppercase transition shadow-md">Unlock Command Center</button>
+            <a href="index.html" class="text-xs text-orange-500 hover:text-orange-600 font-semibold inline-block pt-2 transition">← Return to Client Site</a>
+        </div>
+    </div>
+
+    <!-- ENTERPRISE CORE CONTROL HUB -->
+    <div id="admin-dashboard-view" class="hidden max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-8">
+        
+        <!-- GLOBAL APP NAV BAR -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white dark:bg-[#1e293b] p-5 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm gap-4">
+            <div class="space-y-0.5">
+                <h1 class="text-xl font-black tracking-tight text-red-500 flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 bg-red-500 rounded-full animate-ping"></span>
+                    ADMIN CONTROL ENGINE
+                </h1>
+                <p class="text-xs text-slate-400 font-medium">Real-time Operations & Database Orchestration Panel</p>
+            </div>
+            <div class="flex items-center gap-3 w-full sm:w-auto">
+                <!-- ACCESSIBLE SYSTEM SPREADSHEET ENGINE -->
+                <button onclick="exportOrdersToSpreadsheet()" class="flex-1 sm:flex-initial bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-5 py-3 rounded-xl shadow-md shadow-emerald-600/10 transition flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    Export Spreadsheet (CSV)
+                </button>
+                <button onclick="location.reload()" class="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-xs font-bold px-4 py-3 rounded-xl transition">Sign Out</button>
+            </div>
+        </div>
+
+        <!-- ANALYTICS INSIGHTS DATA METRICS -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- COUNTER CARDS -->
+            <div class="lg:col-span-1 grid grid-cols-2 gap-4">
+                <div class="bg-white dark:bg-[#1e293b] p-5 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+                    <span class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Total Stream Logs</span>
+                    <span id="stat-monthly" class="text-3xl font-black tracking-tight mt-2 text-slate-900 dark:text-white">0</span>
+                </div>
+                <div class="bg-white dark:bg-[#1e293b] p-5 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+                    <span class="text-[10px] uppercase text-amber-500 font-bold tracking-wider">⏳ In Queue</span>
+                    <span id="stat-pending" class="text-3xl font-black tracking-tight mt-2 text-amber-500">0</span>
+                </div>
+                <div class="bg-white dark:bg-[#1e293b] p-5 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+                    <span class="text-[10px] uppercase text-blue-500 font-bold tracking-wider">🛵 Dispatched</span>
+                    <span id="stat-picked" class="text-3xl font-black tracking-tight mt-2 text-blue-500">0</span>
+                </div>
+                <div class="bg-white dark:bg-[#1e293b] p-5 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+                    <span class="text-[10px] uppercase text-green-500 font-bold tracking-wider">✅ Settled</span>
+                    <span id="stat-delivered" class="text-3xl font-black tracking-tight mt-2 text-green-500">0</span>
+                </div>
+            </div>
+            
+            <!-- METRICS DISTRIBUTION GRAPHIC CHART (COMPLIANT WITH image_408ce6.png) -->
+            <div class="lg:col-span-2 bg-white dark:bg-[#1e293b] p-5 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m0 0a2 2 0 002 2h2a2 2 0 002-2v-7a2 2 0 00-2-2h-2a2 2 0 00-2 2v7z"/></svg>
+                    Order Metrics Distribution
+                </h3>
+                <div class="h-44 w-full relative">
+                    <canvas id="analyticsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- CORE UTILITY PIPELINES -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- LEFT AREA: STREAMING LIVE LOGS NODE -->
+            <div class="lg:col-span-7 space-y-4">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                        <span>Active Order Pipeline Stream</span>
+                    </h2>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="orders-container">
+                    <!-- Dynamic rendering fallback injection -->
+                </div>
+            </div>
+
+            <!-- RIGHT AREA: MANAGEMENT CONTROL SYSTEM AND MULTI-FORM HUBS -->
+            <div class="lg:col-span-5 space-y-6">
+                
+                <!-- FORM 1 MODULE: ADD/EDIT MAIN THALIS -->
+                <div class="bg-white dark:bg-[#1e293b] p-6 rounded-3xl border border-slate-100 dark:border-slate-800 space-y-4 shadow-sm">
+                    <div class="flex justify-between items-center border-b dark:border-slate-800 pb-2">
+                        <h3 id="form-thali-title" class="text-xs font-black text-orange-500 uppercase tracking-wider">Form 1: Add Premium Thali</h3>
+                        <button id="cancel-thali-edit" class="hidden text-[10px] bg-red-50 dark:bg-red-950/40 text-red-500 px-2 py-0.5 rounded font-bold hover:underline" onclick="resetThaliFormState()">Cancel Edit</button>
+                    </div>
+                    <form id="adminThaliForm" onsubmit="saveThaliRecord(event)" class="space-y-3.5 text-xs">
+                        <input type="hidden" id="editThaliId">
+                        <div>
+                            <input type="text" id="thaliTitle" class="w-full border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-[#151f32] p-2.5 rounded-xl outline-none focus:ring-2 focus:ring-orange-500/10 focus:border-orange-500 font-medium transition" placeholder="Thali Title (e.g., Executive Veg Feast)" required>
+                        </div>
+                        <div>
+                            <input type="text" id="thaliItems" class="w-full border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-[#151f32] p-2.5 rounded-xl outline-none focus:ring-2 focus:ring-orange-500/10 focus:border-orange-500 font-medium transition" placeholder="Items Components (e.g., Paneer, Dal, 4 Roti)" required>
+                        </div>
+                        <div>
+                            <input type="number" id="thaliPrice" class="w-full border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-[#151f32] p-2.5 rounded-xl outline-none focus:ring-2 focus:ring-orange-500/10 focus:border-orange-500 font-medium transition" placeholder="Base Price Amount (₹)" required>
+                        </div>
+                        <div class="border border-dashed border-slate-200 dark:border-slate-700 p-3 rounded-xl bg-slate-50/30 dark:bg-[#121a29] flex items-center justify-between">
+                            <input type="file" id="thaliImageFile" class="text-[10px] text-slate-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[10px] file:font-bold file:bg-slate-100 dark:file:bg-slate-800 file:text-slate-600 dark:file:text-slate-300 cursor-pointer">
+                            <input type="hidden" id="thaliImageBase64">
+                        </div>
+                        <button type="submit" id="thaliSubmitBtn" class="w-full bg-orange-500 hover:bg-orange-600 text-white py-2.5 rounded-xl font-bold transition shadow-md shadow-orange-500/10">Publish Thali Menu</button>
+                    </form>
+                </div>
+
+                <!-- FORM 2 MODULE: ADD/EDIT EXTRA ADDONS -->
+                <div class="bg-white dark:bg-[#1e293b] p-6 rounded-3xl border border-slate-100 dark:border-slate-800 space-y-4 shadow-sm">
+                    <div class="flex justify-between items-center border-b dark:border-slate-800 pb-2">
+                        <h3 id="form-addon-title" class="text-xs font-black text-blue-500 uppercase tracking-wider">Form 2: Add Extra Addons</h3>
+                        <button id="cancel-addon-edit" class="hidden text-[10px] bg-red-50 dark:bg-red-950/40 text-red-500 px-2 py-0.5 rounded font-bold hover:underline" onclick="resetAddonFormState()">Cancel Edit</button>
+                    </div>
+                    <form id="adminAddonForm" onsubmit="saveAddonRecord(event)" class="space-y-3.5 text-xs">
+                        <input type="hidden" id="editAddonId">
+                        <div>
+                            <input type="text" id="addonTitle" class="w-full border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-[#151f32] p-2.5 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 font-medium transition" placeholder="Addon Component Name (e.g., Extra Gulab Jamun)" required>
+                        </div>
+                        <div>
+                            <input type="number" id="addonPrice" class="w-full border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-[#151f32] p-2.5 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 font-medium transition" placeholder="Premium Price Unit (₹)" required>
+                        </div>
+                        <button type="submit" id="addonSubmitBtn" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2.5 rounded-xl font-bold transition shadow-md shadow-blue-500/10">Publish Extra Component</button>
+                    </form>
+                </div>
+
+                <!-- LIVE CRUD INFRASTRUCTURE LIST HUB (SYNCHRONIZED CONTROLLER) -->
+                <div class="bg-white dark:bg-[#1e293b] p-6 rounded-3xl border border-slate-100 dark:border-slate-800 space-y-4 shadow-sm">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/></svg>
+                        Manage Active Menu Components
+                    </h3>
+                    
+                    <div class="space-y-2.5">
+                        <h4 class="text-[11px] font-bold text-orange-500 uppercase tracking-wider flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 bg-orange-500 rounded-full"></span> Live Thali Products
+                        </h4>
+                        <div id="crud-thalis-list" class="space-y-2 max-h-36 overflow-y-auto pr-1"></div>
+                    </div>
+
+                    <div class="space-y-2.5 pt-3 border-t border-slate-100 dark:border-slate-800">
+                        <h4 class="text-[11px] font-bold text-blue-500 uppercase tracking-wider flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> Live Extra Components
+                        </h4>
+                        <div id="crud-addons-list" class="space-y-2 max-h-36 overflow-y-auto pr-1"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- SDK & INITIALIZATION DEPS -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
